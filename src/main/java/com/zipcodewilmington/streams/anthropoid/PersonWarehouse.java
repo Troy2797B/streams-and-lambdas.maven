@@ -5,6 +5,9 @@ import com.zipcodewilmington.streams.tools.logging.LoggerHandler;
 import com.zipcodewilmington.streams.tools.logging.LoggerWarehouse;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,29 +39,47 @@ public final class PersonWarehouse implements Iterable<Person> {
         return people.stream().map(Person::getName).collect(Collectors.toList());
     }
 
-
+    public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor){
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+    //as explained below, we need this predicate to filter. The predicate is basically the condition that the filter abides by.
     /**
      * @return list of uniquely named Person objects
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
-        people.stream().map(Person::getName).filter();
-        return null;
+        List <Person> distinctElements = people.stream().filter(distinctByKey(Person::getName)).collect(Collectors.toList());
+        return distinctElements.stream();
     }
-
+    //What was done above is that I am making a list of distinct elements using filter. Filter has to take
+    //in a predicate, which to my inderstanding is a method that does something for each
+    //thing in a stream, but you can't do it directly so we do it this way.
 
     /**
      * @param character starting character of Person objects' name
      * @return a Stream of respective
      */ //TODO
+    //a very long line but this is what I know how to do. You make a list that is equal to
+    //a stream of people
+    //you filter out the people whose name doesn't start with character
+    //then you return that list as a stream
     public Stream<Person> getUniquelyNamedPeopleStartingWith(Character character) {
-        return null;
+        List <Person> list = people.stream().filter(Person -> !Person.getName().startsWith(character.toString())).collect(Collectors.toList());
+        return list.stream();
     }
+
+    //creating a predicate to filter out people whose name does not start with character
+    //OOP NEVERMIND i dont even have to make a separate predicate function...???
 
     /**
      * @param n first `n` Person objects
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getFirstNUniquelyNamedPeople(int n) {
+        //i dont get what this is asking for
+        //is it asking for a person at a specific index?
+        //is it asking for everyone with that name???
+        //im confused
         return null;
     }
 
@@ -66,7 +87,10 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a mapping of Person Id to the respective Person name
      */ // TODO
     public Map<Long, String> getIdToNameMap() {
-        return null;
+        //somehow use get personal Id...and get name...then use Collectors.toMap to turn it into a map
+        //Map<Person -> Person::getPersonalId, Person -> Person::getName>
+        //oh wow I did it!!!! I think
+        return people.stream().collect(Collectors.toMap(Person::getPersonalId, Person::getName));
     }
 
 
@@ -74,6 +98,7 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of Stream of Aliases
      */ // TODO
     public Stream<Stream<String>> getNestedAliases() {
+
         return null;
     }
 

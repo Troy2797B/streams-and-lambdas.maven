@@ -42,8 +42,7 @@ public final class PersonFactory extends Person{
      */ // TODO
     public List<Person> createPersonList(int listSize) {
         Stream<Person> peepStream = createPersonStream(listSize);
-       List<Person> peopleList = peepStream.collect(Collectors.toList());
-        return peopleList;
+        return peepStream.collect(Collectors.toList());
     }
 
 
@@ -63,6 +62,7 @@ public final class PersonFactory extends Person{
      * @return - Stream representation of collection of Person objects
      */ // TODO
     public Stream<Person> createPersonStream(int streamCount) {
-        return Stream.generate(Person::new).limit(streamCount);
+        List<Person> list = Stream.generate(Person::new).limit(streamCount).collect(Collectors.toList());
+        return list.stream();
     }
 }
