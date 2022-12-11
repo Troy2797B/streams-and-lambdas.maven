@@ -53,8 +53,6 @@ public final class PersonFactory extends Person{
     public Person[] createPersonArray(int arrayLength) {
         return createPersonList(arrayLength).toArray( new Person[0]);
     }
-
-
     /**
      * Section 8.2
      *
@@ -62,7 +60,7 @@ public final class PersonFactory extends Person{
      * @return - Stream representation of collection of Person objects
      */ // TODO
     public Stream<Person> createPersonStream(int streamCount) {
-        List<Person> list = Stream.generate(Person::new).limit(streamCount).collect(Collectors.toList());
+        List<Person> list = Stream.generate(this::createRandomPerson).limit(streamCount).collect(Collectors.toList());
         return list.stream();
     }
 }

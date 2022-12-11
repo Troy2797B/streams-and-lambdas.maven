@@ -64,7 +64,7 @@ public final class PersonWarehouse implements Iterable<Person> {
     //you filter out the people whose name doesn't start with character
     //then you return that list as a stream
     public Stream<Person> getUniquelyNamedPeopleStartingWith(Character character) {
-        List <Person> list = people.stream().filter(Person -> !Person.getName().startsWith(character.toString())).collect(Collectors.toList());
+        List <Person> list = people.stream().filter(Person -> Person.getName().startsWith(character.toString())).collect(Collectors.toList());
         return list.stream();
     }
 
@@ -98,7 +98,6 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of Stream of Aliases
      */ // TODO
     public Stream<Stream<String>> getNestedAliases() {
-
         return null;
     }
 
@@ -107,6 +106,10 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of all Aliases
      */ // TODO
     public Stream<String> getAllAliases() {
+        //a stream to get a list of arrays
+//        List<String[]> people = stream().map(Person::getAliases).collect(Collectors.toList());
+//        //a stream to get the strings of the array
+//        people.stream().forEach();
         return null;
     }
 
